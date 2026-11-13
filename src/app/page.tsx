@@ -1,69 +1,183 @@
-import Image from "next/image";
+import Link from "next/link"
+import type { Metadata } from "next"
+import { JsonLd } from "@/components/seo/json-ld"
+import { Cta } from "@/components/site/cta"
+import { DeliveryNote } from "@/components/site/delivery-note"
+import { FaqList } from "@/components/site/faq-list"
+import { LinkButton } from "@/components/site/link-button"
+import { Reveal } from "@/components/site/reveal"
+import { Section } from "@/components/site/section"
+import { getCaseStudies } from "@/lib/content"
+import { homeFaqs, homeSteps, trustPoints } from "@/lib/home"
+import { faqJsonLd } from "@/lib/seo"
+import { services } from "@/lib/services"
+import { site } from "@/lib/site"
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: {
+    absolute: "Hushlane Labs — White-label tech, product, and AI automation",
+  },
+  description: site.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Hushlane Labs — White-label tech, product, and AI automation",
+    description: site.description,
+    url: "/",
+    siteName: site.name,
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Hushlane Labs. Your brand. Our build.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hushlane Labs — White-label tech, product, and AI automation",
+    description: site.description,
+    images: ["/opengraph-image"],
+  },
+}
+
+export default function HomePage() {
+  const studies = getCaseStudies()
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <JsonLd data={faqJsonLd(homeFaqs)} />
+      <section className="hero-glow relative overflow-hidden border-b border-border">
+        <div className="mx-auto grid w-full max-w-6xl gap-14 px-6 py-20 sm:py-28 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div>
+            <p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+              {site.tagline}
+            </p>
+            <h1 className="mt-4 max-w-3xl text-4xl font-medium tracking-tight text-balance sm:text-6xl sm:leading-[1.05]">
+              White-label tech, product, and AI automation for agencies
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              We design and ship the work your clients already hired you for. Websites, apps, software, and automation go out under your name. Ours stays off the masthead.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <LinkButton href="/contact">Start a brief</LinkButton>
+              <LinkButton href="/work" variant="outline">
+                See sample work
+              </LinkButton>
+            </div>
+            <p className="mt-8 text-sm text-muted-foreground">
+              Agencies in the {site.markets.join(", ")}.
+            </p>
+          </div>
+          <DeliveryNote />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <Section
+        id="services"
+        eyebrow="Services"
+        title="Five ways agencies use a quiet build partner"
+        intro="Each practice has its own page, scope, and questions. Start with the one that matches the proposal you already sold."
+      >
+        <div className="divide-y divide-border border-y border-border">
+          {services.map((service, index) => (
+            <Reveal key={service.slug}>
+              <Link
+                href={`/services/${service.slug}`}
+                className="group grid gap-3 py-6 transition-colors hover:bg-muted/40 sm:grid-cols-[4rem_14rem_1fr_auto] sm:items-baseline sm:gap-6 sm:px-2"
+              >
+                <span className="font-mono text-xs text-muted-foreground">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="font-medium">{service.navLabel}</span>
+                <span className="text-sm leading-relaxed text-muted-foreground">{service.card}</span>
+                <span aria-hidden="true" className="text-muted-foreground transition group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+            </Reveal>
+          ))}
         </div>
-      </main>
-    </div>
-  );
+      </Section>
+
+      <Section
+        id="process"
+        eyebrow="How it works"
+        title="Your client relationship stays yours"
+        intro="The longer version, including the confidentiality rules, is on the how we work page."
+        className="border-t border-border"
+      >
+        <ol className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          {homeSteps.map((step, index) => (
+            <li key={step.title} className="bg-background p-6">
+              <p className="font-mono text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
+              <h3 className="mt-4 text-lg font-medium tracking-tight">{step.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.detail}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-6 text-sm">
+          <Link href="/how-we-work" className="underline-offset-4 hover:underline">
+            Read the full working agreement
+          </Link>
+        </p>
+      </Section>
+
+      <Section
+        id="trust"
+        eyebrow="Trust"
+        title="Quiet is a practice, not a slogan"
+        className="border-t border-border"
+      >
+        <div className="grid gap-10 md:grid-cols-3">
+          {trustPoints.map((point) => (
+            <div key={point.title}>
+              <h3 className="text-lg font-medium tracking-tight">{point.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{point.detail}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        id="work"
+        eyebrow="Case studies"
+        title="Sample engagements you can replace"
+        intro="These are placeholders so the structure is real. Swap in client work when you have written permission to name it."
+        className="border-t border-border"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          {studies.map((study) => (
+            <Link
+              key={study.slug}
+              href={`/work/${study.slug}`}
+              className="group rounded-2xl border border-border bg-card p-6 transition-colors hover:border-foreground/20"
+            >
+              <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground">
+                <span>{study.industry}</span>
+                {study.placeholder ? <span>Sample</span> : <span>{study.year}</span>}
+              </div>
+              <h3 className="mt-6 text-2xl font-medium tracking-tight group-hover:underline group-hover:decoration-border group-hover:underline-offset-4">
+                {study.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{study.summary}</p>
+            </Link>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        id="faq"
+        eyebrow="FAQ"
+        title="Before you send a client’s name"
+        className="border-t border-border"
+      >
+        <FaqList items={homeFaqs} />
+      </Section>
+
+      <Cta />
+    </>
+  )
 }
