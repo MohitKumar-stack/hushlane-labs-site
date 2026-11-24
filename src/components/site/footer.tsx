@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { CookieSettingsButton } from "@/components/site/cookie-consent"
 import { services } from "@/lib/services"
 import { site } from "@/lib/site"
 
@@ -79,6 +80,7 @@ export function Footer() {
             <Link href="/terms" className="hover:text-foreground">
               Terms
             </Link>
+            <CookieSettingsButton />
           </div>
         </div>
       </div>
