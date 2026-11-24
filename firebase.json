@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "cleanUrls": true,
     "trailingSlash": false,
     "headers": [
@@ -13,6 +17,18 @@
             "value": "public, max-age=31536000, immutable"
           }
         ]
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/pricing",
+        "destination": "/contact",
+        "type": 301
+      },
+      {
+        "source": "/starter-projects",
+        "destination": "/services",
+        "type": 301
       }
     ]
   }

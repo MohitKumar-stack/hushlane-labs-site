@@ -9,7 +9,7 @@ import { services } from "@/lib/services"
 export const metadata = pageMetadata({
   title: "White Label Services for Agencies | Hushlane Labs",
   description:
-    "Five white-label services for agencies: web, app, AI automation, software, and MVP. The build ships under your brand.",
+    "Five white-label services for agencies: web development, app development, AI automation, software, and MVP builds. Every build ships under your brand.",
   path: "/services",
 })
 
