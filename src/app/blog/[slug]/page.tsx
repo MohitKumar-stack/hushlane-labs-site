@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/site/breadcrumbs"
 import { TrackedLink } from "@/components/site/tracked-link"
 import { bookingHref } from "@/lib/booking"
 import { formatDate, getPost, getPosts, markdownHeadings, readingTime, relatedPosts } from "@/lib/content"
-import { blogPostingJsonLd, breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
+import { blogPostingJsonLd, breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo"
 import { site } from "@/lib/site"
 
 export function generateStaticParams() {
@@ -55,6 +55,7 @@ export default async function BlogPostPage({
     <article className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-20">
       <JsonLd data={blogPostingJsonLd(post)} />
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
+      {post.faq.length > 0 ? <JsonLd data={faqJsonLd(post.faq)} /> : null}
       <Breadcrumbs items={crumbs} />
       <header className="mt-8 max-w-3xl">
         <p className="text-sm text-muted-foreground">

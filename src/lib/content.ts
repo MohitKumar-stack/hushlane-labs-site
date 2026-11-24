@@ -32,6 +32,7 @@ export type Post = {
   tags: string[]
   service?: string
   body: string
+  faq: { question: string; answer: string }[]
 }
 
 function readMdx(dir: string) {
@@ -118,7 +119,36 @@ export function getCaseStudy(slug: string) {
   return getCaseStudies().find((study) => study.slug === slug)
 }
 
+// Questions are read from a "## Frequently asked questions" section: each
+// "### Question" heading followed by its answer paragraphs.
+export function extractFaq(body: string) {
+  const section = body.split(/^##\s+Frequently asked questions\s*$/im)[1]
+  if (!section) return []
+  const block = section.split(/^##\s+/m)[0]
+  return block
+    .split(/^###\s+/m)
+    .slice(1)
+    .map((part) => {
+      const [question, ...rest] = part.split("\n")
+      const answer = rest
+        .join(" ")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/\s+/g, " ")
+        .trim()
+      return { question: question.trim(), answer }
+    })
+    .filter((item) => item.question && item.answer)
+}
+
+// A post goes live on its date. Dates are compared in India time, because the
+// publishing job and the daily rebuild run on IST. Set SHOW_SCHEDULED_POSTS=1
+// locally to preview posts that are not due yet.
+function todayInIndia() {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" })
+}
+
 export function getPosts(): Post[] {
+  const today = todayInIndia()
   return readMdx("blog")
     .map(({ slug, data, body }) => {
       const record = data as Record<string, unknown>
@@ -137,8 +167,10 @@ export function getPosts(): Post[] {
         tags: stringList(record.tags, "tags", slug),
         service: typeof record.service === "string" ? record.service.trim() : undefined,
         body,
+        faq: extractFaq(body),
       }
     })
+    .filter((post) => process.env.SHOW_SCHEDULED_POSTS === "1" || post.date <= today)
     .sort((a, b) => (a.date < b.date ? 1 : -1))
 }
 
