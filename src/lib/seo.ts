@@ -8,11 +8,19 @@ const socialImage = {
   alt: "Hushlane Labs. Your brand. Our build.",
 }
 
+const hreflangLocales = ["en", "en-US", "en-GB", "en-AU", "en-CA", "x-default"] as const
+
+export function hreflangLanguages(path: string) {
+  return Object.fromEntries(hreflangLocales.map((locale) => [locale, path]))
+}
+
 type PageMeta = {
   title: string
   description: string
   path: string
   ogType?: "website" | "article"
+  publishedTime?: string
+  modifiedTime?: string
 }
 
 export function pageMetadata({
@@ -20,11 +28,13 @@ export function pageMetadata({
   description,
   path,
   ogType = "website",
+  publishedTime,
+  modifiedTime,
 }: PageMeta): Metadata {
   return {
-    title,
+    title: { absolute: title },
     description,
-    alternates: { canonical: path },
+    alternates: { canonical: path, languages: hreflangLanguages(path) },
     openGraph: {
       title,
       description,
@@ -33,6 +43,8 @@ export function pageMetadata({
       type: ogType,
       locale: "en_US",
       images: [socialImage],
+      ...(publishedTime ? { publishedTime } : {}),
+      ...(modifiedTime ? { modifiedTime } : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -53,7 +65,11 @@ export const rootMetadata: Metadata = {
   applicationName: site.name,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: hreflangLanguages("/"),
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -79,16 +95,29 @@ export const rootMetadata: Metadata = {
     : {}),
 }
 
+function linkedinUrl() {
+  try {
+    const url = new URL(site.linkedin)
+    if (url.protocol === "https:" && url.hostname.endsWith("linkedin.com")) return url.toString()
+  } catch {
+    return ""
+  }
+  return ""
+}
+
 export function organizationJsonLd() {
+  const linkedin = linkedinUrl()
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: site.name,
     url: site.url,
+    logo: new URL("/apple-icon", site.url).toString(),
     email: site.email,
     slogan: site.tagline,
     description: site.description,
     areaServed: ["US", "GB", "AU", "CA"],
+    ...(linkedin ? { sameAs: [linkedin] } : {}),
   }
 }
 
@@ -132,6 +161,71 @@ export function faqJsonLd(items: { question: string; answer: string }[]) {
         text: item.answer,
       },
     })),
+  }
+}
+
+export function projectJsonLd(project: {
+  title: string
+  summary: string
+  slug: string
+  url: string
+  tags: string[]
+  serviceName: string
+  servicePath: string
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["Project", "CreativeWork"],
+    name: project.title,
+    description: project.summary,
+    url: new URL(`/work/${project.slug}`, site.url).toString(),
+    sameAs: project.url,
+    keywords: project.tags.join(", "),
+    creator: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+    },
+    about: {
+      "@type": "Service",
+      name: project.serviceName,
+      url: new URL(project.servicePath, site.url).toString(),
+    },
+  }
+}
+
+export function blogPostingJsonLd(post: {
+  title: string
+  description: string
+  slug: string
+  date: string
+  updated: string
+}) {
+  const url = new URL(`/blog/${post.slug}`, site.url).toString()
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.updated,
+    image: new URL("/opengraph-image", site.url).toString(),
+    mainEntityOfPage: url,
+    url,
+    author: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+      logo: {
+        "@type": "ImageObject",
+        url: new URL("/apple-icon", site.url).toString(),
+      },
+    },
   }
 }
 

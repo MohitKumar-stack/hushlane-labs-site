@@ -1,11 +1,13 @@
-import { LinkButton } from "@/components/site/link-button"
+import { BookingCta } from "@/components/site/booking-cta"
 
 export function Cta({
-  title = "If the client already said yes, send the brief.",
+  title = "If the client already said yes, book a free call.",
   body = "Tell us what you sold, the date they expect, and whether we should stay off the call. We reply within one business day.",
+  action = "Book a Free Call",
 }: {
   title?: string
   body?: string
+  action?: string
 }) {
   return (
     <section className="border-t border-border">
@@ -14,7 +16,7 @@ export function Cta({
           <h2 className="text-3xl font-medium tracking-tight text-balance sm:text-4xl">{title}</h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">{body}</p>
         </div>
-        <LinkButton href="/contact">Start a brief</LinkButton>
+        <BookingCta>{action}</BookingCta>
       </div>
     </section>
   )

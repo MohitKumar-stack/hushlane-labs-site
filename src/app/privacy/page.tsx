@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo"
 import { site } from "@/lib/site"
 
 export const metadata = pageMetadata({
-  title: "Privacy Policy",
+  title: "Privacy Policy | Hushlane Labs",
   description:
     "How Hushlane Labs handles information submitted through hushlanelabs.com, including the contact form, email, and optional analytics.",
   path: "/privacy",
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
         </p>
         <h2 className="pt-4 text-2xl font-medium tracking-tight text-foreground">What we collect</h2>
         <p>
-          If you use the contact form, we collect your name, work email, agency name, website if you provide one, the service you select, a budget range, and your message. We also store the page address and the time you sent it. A hidden field is used to reduce spam. If that field is filled in, we discard the submission.
+          If you use the contact form, we collect your name, work email, agency name, website if you provide one, the service you select, a budget range, and your message. We also store the page address and the time you sent it. A hidden field is used to reduce spam. If that field is filled in, we discard the submission. If you book a call, the scheduler (Google Calendar or Cal.com) collects the time and the details that booking form asks for. The invite is meant to include a Google Meet link.
         </p>
         <h2 className="pt-4 text-2xl font-medium tracking-tight text-foreground">Where it goes</h2>
         <p>

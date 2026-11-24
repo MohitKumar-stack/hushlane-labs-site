@@ -25,7 +25,7 @@ export const services: Service[] = [
     navLabel: "Web development",
     eyebrow: "White-label web development",
     h1: "White-label web development for agencies",
-    metaTitle: "White Label Web Development for Agencies",
+    metaTitle: "White Label Web Development for Agencies | Hushlane Labs",
     metaDescription:
       "White label web development for agencies in the US, UK, Australia, and Canada. Marketing sites, product sites, and headless CMS builds under your brand.",
     lede: "You sold the website. We build it in your design system, on your client's domain, and we never appear in the footer.",
@@ -107,13 +107,14 @@ export const services: Service[] = [
       },
     ],
     related: ["white-label-mvp-development", "white-label-software-development"],
+    caseStudy: "acredge",
   },
   {
     slug: "white-label-app-development",
     navLabel: "App development",
     eyebrow: "White-label app development",
     h1: "White-label app development your clients never trace",
-    metaTitle: "White Label App Development for Agencies",
+    metaTitle: "White Label App Development Partner | Hushlane Labs",
     metaDescription:
       "White label app development for agencies. iOS and Android products, device QA, and store handoff, with your client's name on the listing.",
     lede: "iOS and Android products built from a repository your agency owns, with store listings that name your client.",
@@ -198,14 +199,14 @@ export const services: Service[] = [
       },
     ],
     related: ["white-label-ai-automation", "white-label-mvp-development"],
-    caseStudy: "zappio",
+    caseStudy: "lumic",
   },
   {
     slug: "white-label-ai-automation",
     navLabel: "AI automation",
     eyebrow: "White-label AI automation",
     h1: "White-label AI automation for client operations",
-    metaTitle: "White Label AI Automation for Agencies",
+    metaTitle: "White Label AI Automation for Agencies | Hushlane Labs",
     metaDescription:
       "White label AI automation agencies can resell: inbox triage, document flows, CRM updates, and voice agents, with a human still approving the risky steps.",
     lede: "We automate the repetitive work inside a client's business and leave your agency as the vendor of record.",
@@ -298,7 +299,7 @@ export const services: Service[] = [
     navLabel: "Software development",
     eyebrow: "White-label software development",
     h1: "A white-label software development partner",
-    metaTitle: "White Label Software Development Partner",
+    metaTitle: "White Label Software Development Partner | Hushlane Labs",
     metaDescription:
       "Outsource development to India through a white-label software development partner. Portals, integrations, and internal tools under your agency's brand.",
     lede: "Portals, integrations, and internal tools for agencies that want senior delivery without adding a vendor to the org chart.",
@@ -365,7 +366,7 @@ export const services: Service[] = [
       {
         question: "Is this staff augmentation or a fixed project?",
         answer:
-          "Either. A dedicated developer sits in your queue. A fixed project has a boundary and milestones. The pricing page separates them. We do not rotate people through either one.",
+          "Either. A dedicated developer sits in your queue. A fixed project has a boundary and milestones. We do not rotate people through either one.",
       },
       {
         question: "What hours overlap with the US, UK, and Australia?",
@@ -384,14 +385,13 @@ export const services: Service[] = [
       },
     ],
     related: ["white-label-web-development", "white-label-ai-automation"],
-    caseStudy: "lumic",
   },
   {
     slug: "white-label-mvp-development",
     navLabel: "MVP development",
     eyebrow: "White-label MVP development",
     h1: "White-label MVP development for pitches you already sold",
-    metaTitle: "White Label MVP Development for Agencies",
+    metaTitle: "White Label MVP Development for Agencies | Hushlane Labs",
     metaDescription:
       "White-label MVP development for agencies. A fixed boundary, working software, and a handoff your team can extend after the first client demo.",
     lede: "A small product with a hard edge, so your agency can demo it under your name and keep building after the first yes.",

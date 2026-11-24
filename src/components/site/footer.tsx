@@ -13,9 +13,17 @@ export function Footer() {
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
             {site.tagline} White-label tech, product, and AI automation for agencies.
           </p>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 flex flex-col gap-2 text-sm text-muted-foreground">
             <a className="underline-offset-4 hover:underline" href={`mailto:${site.email}`}>
               {site.email}
+            </a>
+            <a
+              className="underline-offset-4 hover:underline"
+              href={site.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
             </a>
           </p>
         </div>
@@ -40,7 +48,6 @@ export function Footer() {
             {[
               ["/how-we-work", "How we work"],
               ["/work", "Case studies"],
-              ["/pricing", "Pricing"],
               ["/about", "About"],
               ["/contact", "Contact"],
               ["/blog", "Notes"],

@@ -2,11 +2,13 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { JsonLd } from "@/components/seo/json-ld"
 import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { BookingCta } from "@/components/site/booking-cta"
 import { Cta } from "@/components/site/cta"
 import { FaqList } from "@/components/site/faq-list"
 import { LinkButton } from "@/components/site/link-button"
-import { getCaseStudy } from "@/lib/content"
-import { faqJsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo"
+import { getCaseStudy, postsForService } from "@/lib/content"
+import { iconClass, serviceIcons } from "@/lib/icons"
+import { breadcrumbJsonLd, faqJsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo"
 import { getService, services } from "@/lib/services"
 
 export function generateStaticParams() {
@@ -43,21 +45,28 @@ export default async function ServicePage({
     .map((item) => getService(item))
     .filter((item) => item !== undefined)
   const study = service.caseStudy ? getCaseStudy(service.caseStudy) : undefined
+  const notes = postsForService(service.slug)
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: service.navLabel, path: `/services/${service.slug}` },
+  ]
+  const Icon = serviceIcons[service.slug]
 
   return (
     <>
       <JsonLd data={serviceJsonLd(service)} />
       <JsonLd data={faqJsonLd(service.faqs)} />
+      <JsonLd data={breadcrumbJsonLd(crumbs)} />
       <header className="border-b border-border">
         <div className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-20">
-          <Breadcrumbs
-            items={[
-              { name: "Home", path: "/" },
-              { name: "Services", path: "/services" },
-              { name: service.navLabel, path: `/services/${service.slug}` },
-            ]}
-          />
-          <p className="mt-8 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+          <Breadcrumbs items={crumbs} />
+          {Icon ? (
+            <span className="mt-8 inline-flex size-11 items-center justify-center rounded-xl border border-border bg-muted/40">
+              <Icon aria-hidden="true" className={iconClass} strokeWidth={1.75} />
+            </span>
+          ) : null}
+          <p className="mt-6 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
             {service.eyebrow}
           </p>
           <h1 className="mt-4 max-w-4xl text-4xl font-medium tracking-tight text-balance sm:text-5xl">
@@ -65,7 +74,7 @@ export default async function ServicePage({
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">{service.lede}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <LinkButton href="/contact">Start a brief</LinkButton>
+            <BookingCta />
             <LinkButton href="/how-we-work" variant="outline">
               How we work
             </LinkButton>
@@ -148,18 +157,20 @@ export default async function ServicePage({
                 </Link>
               </li>
             ))}
-            <li>
-              <Link href="/pricing" className="underline-offset-4 hover:underline">
-                Engagement models and starting ranges
-              </Link>
-            </li>
             {study ? (
               <li>
                 <Link href={`/work/${study.slug}`} className="underline-offset-4 hover:underline">
-                  Sample case study: {study.title}
+                  Case study: {study.title}
                 </Link>
               </li>
             ) : null}
+            {notes.map((note) => (
+              <li key={note.slug}>
+                <Link href={`/blog/${note.slug}`} className="underline-offset-4 hover:underline">
+                  {note.title}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </section>

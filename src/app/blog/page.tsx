@@ -4,9 +4,9 @@ import { formatDate, getPosts, readingTime } from "@/lib/content"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
-  title: "Notes",
+  title: "Agency Delivery Notes | Hushlane Labs",
   description:
-    "Notes from Hushlane Labs on white-label delivery for agencies. A working MDX journal, not a prominent marketing channel yet.",
+    "Practical notes for agencies on white-label web development, AI automation, outsourcing, and how to choose a build partner.",
   path: "/blog",
 })
 
@@ -34,7 +34,7 @@ export default function BlogPage() {
           {posts.map((post) => (
             <li key={post.slug} className="py-8">
               <p className="text-sm text-muted-foreground">
-                {formatDate(post.date)} · {readingTime(post.body)} min read
+                {post.category} · {formatDate(post.date)} · {readingTime(post.body)} min read
               </p>
               <h2 className="mt-3 text-2xl font-medium tracking-tight">
                 <Link href={`/blog/${post.slug}`} className="hover:underline hover:decoration-border hover:underline-offset-4">

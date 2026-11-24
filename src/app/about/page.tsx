@@ -23,7 +23,7 @@ const values = [
 ]
 
 export const metadata = pageMetadata({
-  title: "About",
+  title: "About Hushlane Labs | White-Label Studio",
   description:
     "Hushlane Labs is a quiet, reliable white-label partner for agencies in the USA, UK, Australia, and Canada. Your brand. Our build.",
   path: "/about",
@@ -58,6 +58,18 @@ export default function AboutPage() {
           </p>
           <p>
             If a brief needs a skill we do not have, we turn it down. A quiet partner who accepts everything is just slow to disappoint you.
+          </p>
+          <p>
+            The company page is on{" "}
+            <a
+              href={site.linkedin}
+              className="text-foreground underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+            .
           </p>
         </div>
       </section>

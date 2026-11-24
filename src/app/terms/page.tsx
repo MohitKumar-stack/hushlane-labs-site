@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo"
 import { site } from "@/lib/site"
 
 export const metadata = pageMetadata({
-  title: "Terms",
+  title: "Website Terms | Hushlane Labs",
   description:
     "Terms for using the Hushlane Labs website. Client work is governed by the statement of work signed with the agency.",
   path: "/terms",

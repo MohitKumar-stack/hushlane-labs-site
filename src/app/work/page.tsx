@@ -1,13 +1,14 @@
-import Link from "next/link"
+import { StaggerGroup, StaggerItem } from "@/components/motion/stagger-group"
 import { Breadcrumbs } from "@/components/site/breadcrumbs"
 import { Cta } from "@/components/site/cta"
+import { ProjectCard } from "@/components/site/project-card"
 import { getCaseStudies } from "@/lib/content"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
-  title: "Case Studies",
+  title: "Agency Case Studies | Hushlane Labs",
   description:
-    "Sample white-label case studies from Hushlane Labs, including a voice AI CRM and an AI financial intelligence app. Replace them with permitted client work.",
+    "Three shipped products: Zappio at zappio.in, Lumic at lumic.co.in, and Acredge at acredge.ai. Each was designed, built, and deployed end to end.",
   path: "/work",
 })
 
@@ -28,32 +29,21 @@ export default function WorkPage() {
             Case studies
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Problem, solution, technology, and results. The two studies below are samples so the pages have a shape. Publish a real engagement only after the agency agrees in writing.
+            Three products designed, built, and deployed end to end. Screenshot and result slots stay marked until the real files and numbers are added.
           </p>
         </div>
       </header>
-      <section className="mx-auto grid w-full max-w-6xl gap-4 px-6 py-16 md:grid-cols-2">
+      <StaggerGroup className="mx-auto grid w-full max-w-6xl gap-4 px-6 py-16 lg:grid-cols-3">
         {studies.map((study) => (
-          <article key={study.slug} className="rounded-2xl border border-border p-6">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>{study.industry}</span>
-              <span>{study.placeholder ? "Sample" : study.year}</span>
-            </div>
-            <h2 className="mt-6 text-2xl font-medium tracking-tight">
-              <Link href={`/work/${study.slug}`} className="hover:underline hover:decoration-border hover:underline-offset-4">
-                {study.title}
-              </Link>
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{study.summary}</p>
-            <p className="mt-6 text-sm">
-              <Link href={`/work/${study.slug}`} className="underline-offset-4 hover:underline">
-                Read the study
-              </Link>
-            </p>
-          </article>
+          <StaggerItem key={study.slug}>
+            <ProjectCard study={study} />
+          </StaggerItem>
         ))}
-      </section>
-      <Cta title="Have a study we are allowed to tell?" body="We will not draft it from a logo and a guess. Send the problem, the constraint, and what changed." />
+      </StaggerGroup>
+      <Cta
+        title="Need something similar for your client?"
+        body="Book a free 30-min call. Tell us the client, the deadline, and what should ship under your brand."
+      />
     </>
   )
 }

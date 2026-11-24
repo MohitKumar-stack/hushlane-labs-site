@@ -1,13 +1,15 @@
 import Link from "next/link"
+import { StaggerGroup, StaggerItem } from "@/components/motion/stagger-group"
 import { Cta } from "@/components/site/cta"
 import { Breadcrumbs } from "@/components/site/breadcrumbs"
+import { iconClass, serviceIcons } from "@/lib/icons"
 import { pageMetadata } from "@/lib/seo"
 import { services } from "@/lib/services"
 
 export const metadata = pageMetadata({
-  title: "White-Label Services for Agencies",
+  title: "White Label Services for Agencies | Hushlane Labs",
   description:
-    "Web, app, AI automation, software, and MVP development for agencies that need the build to stay under their own brand.",
+    "Five white-label services for agencies: web, app, AI automation, software, and MVP. The build ships under your brand.",
   path: "/services",
 })
 
@@ -31,24 +33,36 @@ export default function ServicesPage() {
         </div>
       </header>
       <div className="mx-auto w-full max-w-6xl px-6 py-16">
-        <ul className="grid gap-4">
-          {services.map((service) => (
-            <li key={service.slug}>
-              <Link
-                href={`/services/${service.slug}`}
-                className="block rounded-2xl border border-border p-6 transition-colors hover:bg-muted/40 sm:p-8"
-              >
-                <p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
-                  {service.eyebrow}
-                </p>
-                <h2 className="mt-3 text-2xl font-medium tracking-tight">{service.h1}</h2>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  {service.overview}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <StaggerGroup className="grid gap-4" as="ul">
+          {services.map((service) => {
+            const Icon = serviceIcons[service.slug]
+            return (
+              <StaggerItem key={service.slug} as="li">
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="group block rounded-2xl border border-border p-6 transition-[background-color,border-color,transform] hover:border-foreground/20 hover:bg-muted/40 sm:p-8"
+                >
+                  <div className="flex items-start gap-4">
+                    {Icon ? (
+                      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted/40">
+                        <Icon aria-hidden="true" className={iconClass} strokeWidth={1.75} />
+                      </span>
+                    ) : null}
+                    <div>
+                      <p className="text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+                        {service.eyebrow}
+                      </p>
+                      <h2 className="mt-3 text-2xl font-medium tracking-tight">{service.h1}</h2>
+                      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                        {service.overview}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </StaggerItem>
+            )
+          })}
+        </StaggerGroup>
       </div>
       <Cta
         title="Not sure which lane the brief belongs in?"

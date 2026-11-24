@@ -1,7 +1,17 @@
 import Link from "next/link"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
-import type { ComponentProps } from "react"
+import type { ComponentProps, ReactNode } from "react"
+import { slugify } from "@/lib/content"
+
+function textOf(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node)
+  if (Array.isArray(node)) return node.map(textOf).join("")
+  if (node && typeof node === "object" && "props" in node) {
+    return textOf((node as { props: { children?: ReactNode } }).props.children)
+  }
+  return ""
+}
 
 function Callout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +36,7 @@ function MdxLink(props: ComponentProps<"a">) {
     <a
       {...props}
       className={className}
-      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     />
   )
 }
@@ -34,8 +44,10 @@ function MdxLink(props: ComponentProps<"a">) {
 const components = {
   Callout,
   a: MdxLink,
-  h2: (props: ComponentProps<"h2">) => (
-    <h2 className="mt-10 text-2xl font-medium tracking-tight" {...props} />
+  h2: ({ children, ...props }: ComponentProps<"h2">) => (
+    <h2 id={slugify(textOf(children))} className="mt-10 scroll-mt-24 text-2xl font-medium tracking-tight" {...props}>
+      {children}
+    </h2>
   ),
   h3: (props: ComponentProps<"h3">) => (
     <h3 className="mt-8 text-xl font-medium tracking-tight" {...props} />

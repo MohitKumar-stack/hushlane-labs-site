@@ -12,10 +12,20 @@ import {
   serviceOptions,
 } from "@/lib/contact"
 import { site } from "@/lib/site"
+import { track } from "@/lib/track"
 
 type FieldErrors = Partial<Record<"name" | "email" | "agency" | "website" | "service" | "budget" | "message", string>>
 
 const fieldClass = "h-11 bg-background px-3 text-base md:text-sm"
+
+function postToSheet(webhook: string, fields: Record<string, string>) {
+  return fetch(webhook, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(fields),
+  })
+}
 
 export function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({})
@@ -66,17 +76,20 @@ export function ContactForm() {
 
     setPending(true)
     try {
-      await fetch(webhook, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-          ...parsed.data,
-          website: normalizeWebsite(parsed.data.website),
-          token: process.env.NEXT_PUBLIC_FORM_TOKEN ?? "",
-          page: window.location.href,
-        }),
+      await postToSheet(webhook, {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        agency: parsed.data.agency,
+        website: normalizeWebsite(parsed.data.website),
+        service: parsed.data.service,
+        budget: parsed.data.budget,
+        message: parsed.data.message,
+        source: "contact",
+        token: process.env.NEXT_PUBLIC_FORM_TOKEN ?? "",
+        page: window.location.href,
+        company_fax: "",
       })
+      track("form_submit")
       setSent(true)
     } catch {
       setFormError(`That did not send. Email ${site.email} and we will reply from there.`)
@@ -88,9 +101,9 @@ export function ContactForm() {
   if (sent) {
     return (
       <div className="rounded-2xl border border-border bg-card p-8" role="status">
-        <h2 className="text-2xl font-medium tracking-tight">Received.</h2>
+        <h2 className="text-2xl font-medium tracking-tight">Thanks, we&apos;ll reply within 24 hours.</h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          We reply within one business day. If the brief is a poor fit, we will say that plainly.
+          If the brief is a poor fit, we will say that plainly.
         </p>
       </div>
     )
@@ -117,56 +130,58 @@ export function ContactForm() {
         </p>
       ) : null}
 
-      <Field id="name" label="Name" error={errors.name}>
-        <Input id="name" name="name" autoComplete="name" required className={fieldClass} aria-invalid={Boolean(errors.name)} />
-      </Field>
-      <Field id="email" label="Work email" error={errors.email}>
-        <Input id="email" name="email" type="email" autoComplete="email" required className={fieldClass} aria-invalid={Boolean(errors.email)} />
-      </Field>
-      <Field id="agency" label="Agency name" error={errors.agency}>
-        <Input id="agency" name="agency" autoComplete="organization" required className={fieldClass} aria-invalid={Boolean(errors.agency)} />
-      </Field>
-      <Field id="website" label="Website" error={errors.website} hint="Optional">
-        <Input id="website" name="website" autoComplete="url" placeholder="https://" className={fieldClass} aria-invalid={Boolean(errors.website)} />
-      </Field>
-      <Field id="service" label="Service needed" error={errors.service}>
-        <select
-          id="service"
-          name="service"
-          required
-          defaultValue=""
-          aria-invalid={Boolean(errors.service)}
-          className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          <option value="" disabled>
-            Select a service
-          </option>
-          {serviceOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field id="name" label="Name" error={errors.name}>
+          <Input id="name" name="name" autoComplete="name" required className={fieldClass} aria-invalid={Boolean(errors.name)} />
+        </Field>
+        <Field id="email" label="Work email" error={errors.email}>
+          <Input id="email" name="email" type="email" autoComplete="email" required className={fieldClass} aria-invalid={Boolean(errors.email)} />
+        </Field>
+        <Field id="agency" label="Agency name" error={errors.agency}>
+          <Input id="agency" name="agency" autoComplete="organization" required className={fieldClass} aria-invalid={Boolean(errors.agency)} />
+        </Field>
+        <Field id="website" label="Website" error={errors.website} hint="Optional">
+          <Input id="website" name="website" autoComplete="url" placeholder="https://" className={fieldClass} aria-invalid={Boolean(errors.website)} />
+        </Field>
+        <Field id="service" label="Service needed" error={errors.service}>
+          <select
+            id="service"
+            name="service"
+            required
+            defaultValue=""
+            aria-invalid={Boolean(errors.service)}
+            className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <option value="" disabled>
+              Select a service
             </option>
-          ))}
-        </select>
-      </Field>
-      <Field id="budget" label="Budget range" error={errors.budget}>
-        <select
-          id="budget"
-          name="budget"
-          required
-          defaultValue=""
-          aria-invalid={Boolean(errors.budget)}
-          className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          <option value="" disabled>
-            Select a range
-          </option>
-          {budgetOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+            {serviceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field id="budget" label="Budget range" error={errors.budget}>
+          <select
+            id="budget"
+            name="budget"
+            required
+            defaultValue=""
+            aria-invalid={Boolean(errors.budget)}
+            className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <option value="" disabled>
+              Select a range
             </option>
-          ))}
-        </select>
-      </Field>
+            {budgetOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
       <Field id="message" label="Message" error={errors.message}>
         <Textarea
           id="message"

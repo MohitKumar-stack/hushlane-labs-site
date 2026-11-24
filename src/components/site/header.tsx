@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { LinkButton } from "@/components/site/link-button"
+import { BookingCta } from "@/components/site/booking-cta"
 import { ThemeToggle } from "@/components/site/theme-toggle"
+import { bookingHref } from "@/lib/booking"
 import { nav, site } from "@/lib/site"
 import { cn } from "@/lib/utils"
+import { track } from "@/lib/track"
 
 function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
@@ -18,6 +20,8 @@ export function Header() {
   const pathname = usePathname()
   const [openPath, setOpenPath] = useState<string | null>(null)
   const open = openPath === pathname
+  const booking = bookingHref()
+  const bookingExternal = booking.startsWith("http")
 
   useEffect(() => {
     if (!open) return
@@ -51,9 +55,7 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <LinkButton href="/contact" className="hidden sm:inline-flex">
-            Start a brief
-          </LinkButton>
+          <BookingCta className="hidden sm:inline-flex" />
           <Button
             type="button"
             variant="outline"
@@ -81,9 +83,14 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/contact" className="rounded-lg px-2 py-3 text-base font-medium hover:bg-muted">
-              Start a brief
-            </Link>
+            <a
+              href={booking}
+              className="rounded-lg px-2 py-3 text-base font-medium hover:bg-muted"
+              onClick={() => track("booking_click")}
+              {...(bookingExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+              Book a Free Call
+            </a>
           </div>
         </nav>
       ) : null}

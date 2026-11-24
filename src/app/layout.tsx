@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@/components/site/analytics"
+import { LeadPopup } from "@/components/lead-popup/lead-popup"
 import { Footer } from "@/components/site/footer"
 import { Header } from "@/components/site/header"
 import { ThemeProvider } from "@/components/site/theme-provider"
@@ -22,13 +23,18 @@ const geistMono = Geist_Mono({
 
 export const metadata = rootMetadata
 
+const themeInit = `(function(){try{var k='hushlane-theme';var s=localStorage.getItem(k);var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var e=document.documentElement;e.classList.remove('light','dark');e.classList.add(t);e.style.colorScheme=t;}catch(e){document.documentElement.classList.add('dark');}})();`
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <Analytics />
         <JsonLd data={organizationJsonLd()} />
@@ -45,6 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
           <Footer />
+          <LeadPopup />
         </ThemeProvider>
       </body>
     </html>
