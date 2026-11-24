@@ -34,7 +34,10 @@ export default function PrivacyPage() {
         </p>
         <h2 className="pt-4 text-2xl font-medium tracking-tight text-foreground">Analytics</h2>
         <p>
-          The site loads Google Tag Manager. Tags in that container, including Google Analytics when it is enabled there, receive technical data such as pages viewed and a coarse location. You can block them with your browser.
+          Analytics only load after you click Accept on the cookie banner. If you click Reject, or ignore the banner, none of them run. When enabled, the site loads Google Tag Manager (and Google Analytics when it is enabled there) and Microsoft Clarity. They receive technical data such as pages viewed, device and browser type, a coarse location, and how you click and scroll. Clarity may record anonymised sessions and heatmaps so we can fix confusing pages. Form fields are masked.
+        </p>
+        <p>
+          Your choice is stored in your browser. You can change it at any time with Cookie settings in the footer.
         </p>
         <h2 className="pt-4 text-2xl font-medium tracking-tight text-foreground">How long we keep it</h2>
         <p>

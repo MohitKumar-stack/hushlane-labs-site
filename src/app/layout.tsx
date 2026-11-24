@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@/components/site/analytics"
+import { CookieConsent } from "@/components/site/cookie-consent"
 import { LeadPopup } from "@/components/lead-popup/lead-popup"
 import { Footer } from "@/components/site/footer"
 import { Header } from "@/components/site/header"
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </main>
           <Footer />
           <LeadPopup />
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
