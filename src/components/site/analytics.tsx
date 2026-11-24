@@ -3,6 +3,11 @@ import Script from "next/script"
 const gtmPattern = /^GTM-[A-Z0-9]+$/
 const gaPattern = /^G-[A-Z0-9]+$/
 const domainPattern = /^[a-z0-9.-]+\.[a-z]{2,}$/i
+const clarityPattern = /^[a-z0-9]{6,20}$/i
+
+const clarityId = clarityPattern.test(process.env.NEXT_PUBLIC_CLARITY_ID || "zim6c00ryf")
+  ? process.env.NEXT_PUBLIC_CLARITY_ID || "zim6c00ryf"
+  : ""
 
 const gtmId = gtmPattern.test(process.env.NEXT_PUBLIC_GTM_ID || "GTM-PCW867CZ")
   ? process.env.NEXT_PUBLIC_GTM_ID || "GTM-PCW867CZ"
@@ -41,6 +46,11 @@ export function Analytics() {
       ) : null}
       {domain ? (
         <Script defer src="https://plausible.io/js/script.js" data-domain={domain} strategy="afterInteractive" />
+      ) : null}
+      {clarityId ? (
+        <Script id="hushlane-clarity" strategy="afterInteractive">
+          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
+        </Script>
       ) : null}
     </>
   )
